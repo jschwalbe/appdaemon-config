@@ -1,0 +1,12 @@
+AppDaemon:
+  logfile: STDOUT
+  errorfile: STDERR
+  threads: 10
+  app_dir: /home/ben/.appdaemon/apps
+HASS:
+  ha_url: !secret ha_url
+
+# Apps
+hello_world:
+  module: hello
+  class: HelloWorld
