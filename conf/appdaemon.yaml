@@ -1,3 +1,7 @@
+##################################
+# Config
+##################################
+
 AppDaemon:
   logfile: STDOUT
   errorfile: STDERR
@@ -6,7 +10,10 @@ AppDaemon:
 HASS:
   ha_url: !secret ha_url
 
+##################################
 # Apps
+##################################
+
 hello_world:
   module: hello
   class: HelloWorld
