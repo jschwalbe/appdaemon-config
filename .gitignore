@@ -1,2 +1,3 @@
 secrets.yaml
-apps/__pychache__
+apps/__pycache__
+apps/*.pyc
