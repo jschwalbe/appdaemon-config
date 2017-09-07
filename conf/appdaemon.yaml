@@ -10,3 +10,7 @@ HASS:
 hello_world:
   module: hello
   class: HelloWorld
+
+slider_log:
+  module: slider_log
+  class: SliderLog
