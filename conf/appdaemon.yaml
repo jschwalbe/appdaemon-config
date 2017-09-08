@@ -21,3 +21,4 @@ hello_world:
 chromecast_volume:
   module: chromecast_volume
   class: ChromecastVolume
+  name: kitchen
