@@ -14,10 +14,6 @@ HASS:
 # Apps
 ##################################
 
-hello_world:
-  module: hello
-  class: HelloWorld
-
 chromecast_volume:
   module: chromecast_volume
   class: ChromecastVolume
