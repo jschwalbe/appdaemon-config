@@ -1,3 +1,5 @@
 secrets.yaml
 apps/__pycache__
 apps/*.pyc
+appdaemon.conf
+
