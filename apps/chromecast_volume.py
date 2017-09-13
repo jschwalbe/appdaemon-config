@@ -27,12 +27,12 @@ class ChromecastVolume(appapi.AppDaemon):
         self.mute_vols[name] = 0
 
     for sensor in self.sensors:
-        self.listen_state(self.update_slider, self.sensors[sensor], duration = 0.1, chromecast_name = sensor)
+        self.listen_state(self.update_slider, entity = self.sensors[sensor], chromecast_name = sensor)
 
     for slider in self.sliders:
-        self.listen_state(self.update_volume, self.sliders[slider], chromecast_name = slider)
+        self.listen_state(self.update_volume, entity = self.sliders[slider], chromecast_name = slider)
 
-    # self.listen_state(self.mute, "input_boolean.chromecast_mute")
+    self.listen_state(self.mute, entity = "input_boolean.chromecast_mute")
 
   def update_volume(self, entity, attribute, old_state, new_state, kwargs):
 
@@ -40,10 +40,7 @@ class ChromecastVolume(appapi.AppDaemon):
 
     sensor_value = self.get_state(self.sensors[chromecast_name])
 
-    if sensor_value == "unknown":
-        self.log("{} is off".format(self.cc_name))
-
-    elif sensor_value != new_state:
+    if sensor_value != new_state:
         self.log("update volume from {} to {}".format(sensor_value, new_state))
         self.call_service("media_player/volume_set", entity_id = self.media_players[chromecast_name], volume_level = new_state)
 
@@ -59,11 +56,10 @@ class ChromecastVolume(appapi.AppDaemon):
 
   def mute(self, entity, attribute, old_state, new_state, kwargs):
 
-    sensor_vol = self.get_state(self.cc_sensor)
-
     if new_state == "on":
-        self.mute_vol = self.get_state(self.cc_sensor)
-        self.call_service("media_player/volume_set", entity_id = self.cc_media_player, volume_level = 0)
-
+        mute_status = "true"
     elif new_state == "off":
-        self.call_service("media_player/volume_set", entity_id = self.cc_media_player, volume_level = self.mute_vol)
+        mute_status = "false"
+
+    for media_player in self.media_players:
+      self.call_service("media_player/volume_mute", entity_id = self.media_players[media_player], is_volume_muted = mute_status)

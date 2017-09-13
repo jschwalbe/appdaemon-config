@@ -21,4 +21,4 @@ hello_world:
 chromecast_volume:
   module: chromecast_volume
   class: ChromecastVolume
-  names: kitchen,stereo
+  names: kitchen,stereo,dining_room
