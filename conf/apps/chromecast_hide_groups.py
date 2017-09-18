@@ -13,4 +13,4 @@ class ChromecastHide(appapi.AppDaemon):
       self.listen_state(self.hide_chromecasts, entity = "media_player.downstairs", new = "playing")
 
   def hide_chromecasts(self, entity, attribute, old_state, new_state, kwargs):
-      
+      self.log("got here")
