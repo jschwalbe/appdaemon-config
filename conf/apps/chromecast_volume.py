@@ -40,7 +40,7 @@ class ChromecastVolume(appapi.AppDaemon):
     sensor_value = self.get_state(self.sensors[chromecast_name])
 
     if sensor_value != new_state:
-        self.log("update volume from {} to {}".format(sensor_value, new_state))
+        # self.log("update volume from {} to {}".format(sensor_value, new_state))
         self.call_service("media_player/volume_set", entity_id = self.media_players[chromecast_name], volume_level = new_state)
 
   def update_slider(self, entity, attribute, old_state, new_state, kwargs):
@@ -50,7 +50,7 @@ class ChromecastVolume(appapi.AppDaemon):
     slider_value = self.get_state(self.sliders[chromecast_name])
 
     if slider_value != new_state:
-      self.log("update slider from {} to {}".format(slider_value, new_state))
+    #   self.log("update slider from {} to {}".format(slider_value, new_state))
       self.call_service("input_slider/select_value", entity_id = self.sliders[chromecast_name], value = new_state)
 
   def mute(self, entity, attribute, old_state, new_state, kwargs):
