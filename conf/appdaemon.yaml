@@ -1,20 +1,9 @@
 ##################################
 # Config
 ##################################
-
 AppDaemon:
   logfile: STDOUT
   errorfile: STDERR
   threads: 10
-  # app_dir: ~/.appdaemon/conf/apps
 HASS:
   ha_url: !secret ha_url
-
-##################################
-# Apps
-##################################
-
-# chromecast_volume:
-#   module: chromecast_volume
-#   class: ChromecastVolume
-#   names: kitchen,stereo,dining_room

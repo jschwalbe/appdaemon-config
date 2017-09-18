@@ -12,7 +12,6 @@ class ChromecastVolume(appapi.AppDaemon):
   def initialize(self):
 
     # check duration parameter - feedback loop still not work properly
-    # mute method cycles through and checks/compares/stores values as required.
 
     self.names = self.args['names'].split(",")
     self.sliders = {}
