@@ -1,8 +1,10 @@
 chromecast_volume:
   module: chromecast_volume
   class: ChromecastVolume
-  names: kitchen,stereo,dining_room
+  names: stereo,kitchen,dining_room
 
-# chromecast_hide_groups:
-#   module: chromecast_hide_groups
-#   class: ChromecastHide
+chromecast_hide_groups:
+  module: chromecast_group_visibility
+  class: ChromecastGroupVisibility
+  group: downstairs
+  chromecasts: stereo,kitchen,dining_room

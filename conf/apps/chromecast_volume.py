@@ -1,29 +1,26 @@
 import appdaemon.appapi as appapi
 
-#
 # Chromecast volume card
 #
 # Args:
-# names: dining room, kitchen, stereo
+#   names: list of chromecast names to add to volume control card
 #
 
 class ChromecastVolume(appapi.AppDaemon):
 
   def initialize(self):
 
-    # check duration parameter - feedback loop still not work properly
+    # check duration parameter - slide volume change still fires multiple service calls
 
     self.names = self.args['names'].split(",")
     self.sliders = {}
     self.sensors = {}
     self.media_players = {}
-    self.mute_vols = {}
 
     for name in self.names:
         self.sliders[name] = "input_slider.chromecast_volume_{}".format(name)
         self.sensors[name] = "sensor.chromecast_volume_{}".format(name)
         self.media_players[name] = "media_player.{}".format(name)
-        self.mute_vols[name] = 0
 
     for sensor in self.sensors:
         self.listen_state(self.update_slider, entity = self.sensors[sensor], chromecast_name = sensor)
