@@ -10,7 +10,9 @@ import appdaemon.appapi as appapi
 class ChromecastGroupVisibility(appapi.AppDaemon):
 
   def initialize(self):
-    
+
+    # add hide group to hide on startup
+
     self.group = self.args['group']
     self.chromecasts = self.args['chromecasts'].split(",")
     self.cc_groups = {}

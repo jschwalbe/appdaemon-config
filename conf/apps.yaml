@@ -1,25 +1,25 @@
 
 # Chromecast volume elements
 
-cc_volume_tv:
-  module: chromecast_volume
-  class: ChromecastVolume
-  name: tv
+# cc_volume_tv:
+#   module: chromecast_volume
+#   class: ChromecastVolume
+#   name: tv
 
 cc_volume_stereo:
   module: chromecast_volume
   class: ChromecastVolume
   name: stereo
 
-cc_volume_kitchen:
-  module: chromecast_volume
-  class: ChromecastVolume
-  name: kitchen
+# cc_volume_kitchen:
+#   module: chromecast_volume
+#   class: ChromecastVolume
+#   name: kitchen
 
-cc_volume_dining_room:
-  module: chromecast_volume
-  class: ChromecastVolume
-  name: dining_room
+# cc_volume_dining_room:
+#   module: chromecast_volume
+#   class: ChromecastVolume
+#   name: dining_room
 
 # Chromecast group hide
 

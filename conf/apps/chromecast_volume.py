@@ -14,25 +14,35 @@ class ChromecastVolume(appapi.AppDaemon):
 
   def initialize(self):
 
-
     self.name = self.args['name']
+    # self.log(self.name)
+
     self.slider = "input_slider.chromecast_volume_{}".format(self.name)
+    # self.log(self.slider)
+    
     self.sensor = "sensor.chromecast_volume_{}".format(self.name)
+    self.log(self.sensor)
+    
     self.media_player = "media_player.{}".format(self.name)
+    # self.log(self.media_player)
 
-    # !!!!
-    # check duration parameter - slide volume change still fires multiple service calls
-    # !!!!
-    self.listen_state(self.update_slider, entity = self.sensor, duration = 1)
-    self.listen_state(self.update_volume, entity = self.slider)
+    self.listen_state(self.update_slider, entity = self.sensor)
+    # self.listen_state(self.update_volume, entity = self.slider)
 
-    self.listen_state(self.mute_on, entity = "input_boolean.chromecast_mute", new = "on")
-    self.listen_state(self.mute_off, entity = "input_boolean.chromecast_mute", new = "off")
+    # self.listen_state(self.mute_on, entity = "input_boolean.chromecast_mute", new = "on")
+    # self.listen_state(self.mute_off, entity = "input_boolean.chromecast_mute", new = "off")
 
   def update_volume(self, entity, attribute, old_state, new_state, kwargs):
+    if self.get_state(entity, "reason") == "chromecast":
+        self.set_state(entity, attributes = {"reason" : ""})
+        return
 
     sensor_value = self.get_state(self.sensor)
     set_cc_vol = float(new_state) / 10
+
+    self.log(sensor_value)
+    self.log(set_cc_vol)
+    self.log(self.get_state(entity, "reason"))
 
     if sensor_value != set_cc_vol:
         self.log("update volume from {} to {}".format(sensor_value, new_state))
@@ -40,18 +50,19 @@ class ChromecastVolume(appapi.AppDaemon):
 
   def update_slider(self, entity, attribute, old_state, new_state, kwargs):
 
-    slider_value = self.get_state(self.slider)
-    set_slider_vol = float(new_state) * 10
+    self.log("here")  
+#     slider_value = self.get_state(self.slider)
+#     set_slider_vol = float(new_state) * 10
 
-    if slider_value != set_slider_vol:
-      self.log("update slider from {} to {}".format(slider_value, new_state))
-      self.call_service("input_slider/select_value", entity_id = self.slider, value = set_slider_vol)
+#     if slider_value != set_slider_vol:
+#       self.log("update slider from {} to {}".format(slider_value, new_state))
+#       self.set_state(self.slider, state = set_slider_vol, attributes = {"reason":"chromecast"})
 
-  def mute_on(self, entity, attribute, old_state, new_state, kwargs):
+#   def mute_on(self, entity, attribute, old_state, new_state, kwargs):
 
-    self.call_service("media_player/volume_mute", entity_id = self.media_player, is_volume_muted = "true")
+#     self.call_service("media_player/volume_mute", entity_id = self.media_player, is_volume_muted = "true")
 
-  def mute_off(self, entity, attribute, old_state, new_state, kwargs):
+#   def mute_off(self, entity, attribute, old_state, new_state, kwargs):
 
-    self.call_service("media_player/volume_mute", entity_id = self.media_player, is_volume_muted = "false")
+#     self.call_service("media_player/volume_mute", entity_id = self.media_player, is_volume_muted = "false")
 
