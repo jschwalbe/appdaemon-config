@@ -1,61 +1,57 @@
 import appdaemon.appapi as appapi
 
 # Chromecast volume card
-#
+# 
+# Updates the volume of a chromecast following a change of value from an input_slider. 
+# Conversely, it will update the slider value should the volume of the chromecast be 
+# updated from another input source (Google Home app, for example)
+# 
 # Args:
-#   names: list of chromecast names to add to volume control card
+#   name: name of Chromecast as it appears in Homeassitant
 #
 
 class ChromecastVolume(appapi.AppDaemon):
 
   def initialize(self):
 
+
+    self.name = self.args['name']
+    self.slider = "input_slider.chromecast_volume_{}".format(self.name)
+    self.sensor = "sensor.chromecast_volume_{}".format(self.name)
+    self.media_player = "media_player.{}".format(self.name)
+
+    # !!!!
     # check duration parameter - slide volume change still fires multiple service calls
+    # !!!!
+    self.listen_state(self.update_slider, entity = self.sensor, duration = 1)
+    self.listen_state(self.update_volume, entity = self.slider)
 
-    self.names = self.args['names'].split(",")
-    self.sliders = {}
-    self.sensors = {}
-    self.media_players = {}
-
-    for name in self.names:
-        self.sliders[name] = "input_slider.chromecast_volume_{}".format(name)
-        self.sensors[name] = "sensor.chromecast_volume_{}".format(name)
-        self.media_players[name] = "media_player.{}".format(name)
-
-    for sensor in self.sensors:
-        self.listen_state(self.update_slider, entity = self.sensors[sensor], chromecast_name = sensor)
-
-    for slider in self.sliders:
-        self.listen_state(self.update_volume, entity = self.sliders[slider], chromecast_name = slider)
-
-    self.listen_state(self.mute, entity = "input_boolean.chromecast_mute")
+    self.listen_state(self.mute_on, entity = "input_boolean.chromecast_mute", new = "on")
+    self.listen_state(self.mute_off, entity = "input_boolean.chromecast_mute", new = "off")
 
   def update_volume(self, entity, attribute, old_state, new_state, kwargs):
 
-    chromecast_name = kwargs['chromecast_name']
+    sensor_value = self.get_state(self.sensor)
+    set_cc_vol = float(new_state) / 10
 
-    sensor_value = self.get_state(self.sensors[chromecast_name])
-
-    if sensor_value != new_state:
-        # self.log("update volume from {} to {}".format(sensor_value, new_state))
-        self.call_service("media_player/volume_set", entity_id = self.media_players[chromecast_name], volume_level = new_state)
+    if sensor_value != set_cc_vol:
+        self.log("update volume from {} to {}".format(sensor_value, new_state))
+        self.call_service("media_player/volume_set", entity_id = self.media_player, volume_level = set_cc_vol)
 
   def update_slider(self, entity, attribute, old_state, new_state, kwargs):
 
-    chromecast_name = kwargs['chromecast_name']
+    slider_value = self.get_state(self.slider)
+    set_slider_vol = float(new_state) * 10
 
-    slider_value = self.get_state(self.sliders[chromecast_name])
+    if slider_value != set_slider_vol:
+      self.log("update slider from {} to {}".format(slider_value, new_state))
+      self.call_service("input_slider/select_value", entity_id = self.slider, value = set_slider_vol)
 
-    if slider_value != new_state:
-    #   self.log("update slider from {} to {}".format(slider_value, new_state))
-      self.call_service("input_slider/select_value", entity_id = self.sliders[chromecast_name], value = new_state)
+  def mute_on(self, entity, attribute, old_state, new_state, kwargs):
 
-  def mute(self, entity, attribute, old_state, new_state, kwargs):
+    self.call_service("media_player/volume_mute", entity_id = self.media_player, is_volume_muted = "true")
 
-    if new_state == "on":
-        mute_status = "true"
-    elif new_state == "off":
-        mute_status = "false"
+  def mute_off(self, entity, attribute, old_state, new_state, kwargs):
 
-    for media_player in self.media_players:
-      self.call_service("media_player/volume_mute", entity_id = self.media_players[media_player], is_volume_muted = mute_status)
+    self.call_service("media_player/volume_mute", entity_id = self.media_player, is_volume_muted = "false")
+
