@@ -17,6 +17,8 @@ class ChromecastGroupVisibility(appapi.AppDaemon):
     self.chromecasts = self.args['chromecasts'].split(",")
     self.cc_groups = {}
 
+    self.call_service("group/set_visibility", entity_id = "group.cc_{}".format(self.group), visible = "false")
+
     for chromecast in self.chromecasts:
         self.cc_groups[chromecast] = "group.cc_{}".format(chromecast)
 
@@ -25,12 +27,14 @@ class ChromecastGroupVisibility(appapi.AppDaemon):
 
   def hide_chromecasts(self, entity, attribute, old_state, new_state, kwargs):
       
+    self.call_service("group/set_visibility", entity_id = "group.cc_{}".format(self.group), visible = "true")
+    
     for chromecast in self.chromecasts:
       self.call_service("group/set_visibility", entity_id = self.cc_groups[chromecast], visible = "false")  
-      self.call_service("group/set_visibility", entity_id = "group.cc_{}".format(self.group), visible = "true")
 
   def show_chromecasts(self, entity, attribute, old_state, new_state, kwargs):
       
+    self.call_service("group/set_visibility", entity_id = "group.cc_{}".format(self.group), visible = "false")
+
     for chromecast in self.chromecasts:
       self.call_service("group/set_visibility", entity_id = self.cc_groups[chromecast], visible = "true")
-      self.call_service("group/set_visibility", entity_id = "group.cc_{}".format(self.group), visible = "false")
