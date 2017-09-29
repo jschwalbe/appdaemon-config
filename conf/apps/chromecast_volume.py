@@ -7,12 +7,12 @@ from datetime import timedelta
 # Conversely, it will update the slider value should the volume of the chromecast be 
 # updated from another input source (Google Home app, for example)
 # Requires the following components to be available in Homeassistant:
-# input_slider.chromecast_volume_<name> : values 0-1, 0.01 increments
-# sensor.chromecast_volume_<name> : see template sensor for chromecast volume
-# media_player.<name> : chromecast device
+# - input_slider.chromecast_volume_<name> : values 0-1, 0.01 increments
+# - sensor.chromecast_volume_<name> : see template sensor for chromecast volume
+# - media_player.<name> : chromecast device
 # 
 # Args:
-#   name: name of Chromecast as it appears in Homeassitant
+#   name : name of Chromecast as it appears in Homeassitant
 #
 
 class ChromecastVolume(appapi.AppDaemon):
