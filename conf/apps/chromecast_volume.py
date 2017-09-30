@@ -48,9 +48,9 @@ class ChromecastVolume(appapi.AppDaemon):
 
   def update_slider(self, entity, attribute, old_state, new_state, kwargs):
   
-    if (self.datetime() - self.last_called) < timedelta(seconds=1):
+    if (self.datetime() - self.last_called) < timedelta(seconds=0.5):
       self.cancel_timer(self.handle)
-    self.handle = self.run_in(self.update_slider_now,2,new_state = new_state)
+    self.handle = self.run_in(self.update_slider_now,1,new_state = new_state)
     self.last_called = self.datetime()
     self.laststate = new_state
 
