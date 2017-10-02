@@ -16,4 +16,4 @@ class LivingroomOn(appapi.AppDaemon):
 
     self.log(self.datetime())
     self.log("sunset has happened")
-    self.call_service("light/hue_activate_scene", group_name = "Living room", scene_name = "Sunset")
+    self.call_service("light/hue_activate_scene", group_name = "Living room", scene_name = "Home")
