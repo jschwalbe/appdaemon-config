@@ -15,7 +15,7 @@ from datetime import timedelta
 #   name : name of Chromecast as it appears in Homeassitant
 #
 
-class ChromecastVolume(appapi.AppDaemon):
+class VolumeControl(appapi.AppDaemon):
 
   def initialize(self):
 

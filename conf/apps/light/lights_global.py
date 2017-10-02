@@ -1,16 +1,16 @@
 import appdaemon.appapi as appapi
 
-# Morning and evening lights scenes
+# Calculate time to offset light automations by depending on cloud cover
 #
-# Args:
-#   
-#   
+# Updates a global variable with the current time to offset instruction by in minutes
+# Parameters for calcualation are set by scale and buffer.
+# buffer adds x number of minutes to the calculation
+# scale is the time period by which the cloud cover percentage is multiplied by
 #
-# determine sunrise offset based on cloud cover
-# turn on daylight scene at sunrise (minus offset) with transition
-# turn off either at 9am or when presence is absent
+# Args: None
+#  
 
-class LightsGlobal(appapi.AppDaemon):
+class CloudOffset(appapi.AppDaemon):
 
   def initialize(self):
     
@@ -18,9 +18,6 @@ class LightsGlobal(appapi.AppDaemon):
     self.listen_state(self.update_cloud_offset, entity = "sensor.weather_cloud_coverage", scale = 30, buffer = 10)
 
   def update_cloud_offset(self, entity, attribute, old_state, new_state, kwargs):
-    # calculates cloud cover offset in minutes
-    # buffer: number of minutes to add regardless of cloud cover
-    # scale: length of time to multiply cloud percentage by
 
     cloud_perc = float(new_state) / 100
     calc_offset = int((cloud_perc * kwargs["scale"]) + kwargs["buffer"])

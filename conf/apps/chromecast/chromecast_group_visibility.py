@@ -1,17 +1,19 @@
 import appdaemon.appapi as appapi
 
-# Make chromecast group visible when playing
+# Hide Chromecast groups when not playing
+#
+# Takes a Chromecast group name and the names of constituent players
+# Hides group intially, but will flip visibility of group and players if casting to the group
+# This prevents duplicate Chromecast players from appearing on the HA interface
 #
 # Args:
-#   group: name of chromecast group to hide when not playing
-#   chromecasts: list of chromecasts to hide when group is shown
+#   group : name of chromecast group to hide when not playing
+#   chromecasts : list of chromecasts to hide when group is shown
 #
 
-class ChromecastGroupVisibility(appapi.AppDaemon):
+class SwitchGroupVisibility(appapi.AppDaemon):
 
   def initialize(self):
-
-    # add hide group to hide on startup
 
     self.group = self.args['group']
     self.chromecasts = self.args['chromecasts'].split(",")

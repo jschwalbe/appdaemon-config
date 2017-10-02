@@ -2,41 +2,45 @@
 # Chromecast volume elements
 
 cc_volume_tv:
-  module: chromecast_volume
-  class: ChromecastVolume
+  module: chromecast_volume_control
+  class: VolumeControl
   cc_name: tv
 
 cc_volume_stereo:
-  module: chromecast_volume
-  class: ChromecastVolume
+  module: chromecast_volume_control
+  class: VolumeControl
   cc_name: stereo
 
 cc_volume_kitchen:
-  module: chromecast_volume
-  class: ChromecastVolume
+  module: chromecast_volume_control
+  class: VolumeControl
   cc_name: kitchen
 
 cc_volume_dining_room:
-  module: chromecast_volume
-  class: ChromecastVolume
+  module: chromecast_volume_control
+  class: VolumeControl
   cc_name: dining_room
 
 # Chromecast group hide
 
-chromecast_hide_groups:
+cc_group_downstairs:
   module: chromecast_group_visibility
-  class: ChromecastGroupVisibility
+  class: SwitchGroupVisibility
   group: downstairs
   chromecasts: stereo,kitchen,dining_room
 
 # Hue lights automations
 
-# calculates global variables for dependent apps
-lights_global:
+cloud_offset:
   module: lights_global
-  class: LightsGlobal
+  class: CloudOffset
 
-lights_morning_on:
+lights_morning:
   module: lights_morning
-  class: MorningOn
+  class: LivingroomOn
+  dependencies: lights_global
+
+lights_evening:
+  module: lights_evening
+  class: LivingroomOn
   dependencies: lights_global
