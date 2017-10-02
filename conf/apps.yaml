@@ -28,3 +28,15 @@ chromecast_hide_groups:
   class: ChromecastGroupVisibility
   group: downstairs
   chromecasts: stereo,kitchen,dining_room
+
+# Hue lights automations
+
+# calculates global variables for dependent apps
+lights_global:
+  module: lights_global
+  class: LightsGlobal
+
+lights_morning_on:
+  module: lights_morning
+  class: MorningOn
+  dependencies: lights_global
