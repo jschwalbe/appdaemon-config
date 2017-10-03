@@ -1,4 +1,5 @@
 secrets.yaml
 conf/apps/__pycache__
+conf/apps/light/__pycache/*
 conf/apps/*.pyc
-
+*.pyc

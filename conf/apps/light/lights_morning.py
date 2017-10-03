@@ -10,7 +10,7 @@ class LivingroomOn(appapi.AppDaemon):
   def initialize(self):
     
     self.cloud_offset = self.get_app("cloud_offset").cloud_offset
-    self.handle = self.run_at_sunrise(self.sunrise, offset = self.cloud_offset * 60)
+    self.handle = self.run_at_sunrise(self.sunrise, offset = self.cloud_offset * -60)
     
 
   def sunrise(self, kwargs):
