@@ -14,8 +14,8 @@ class CloudOffset(appapi.AppDaemon):
 
   def initialize(self):
     
-    self.cloud_offset = 40    
-    self.listen_state(self.update_cloud_offset, entity = "sensor.weather_cloud_coverage", scale = 30, buffer = 45)
+    self.cloud_offset = 60    
+    self.listen_state(self.update_cloud_offset, entity = "sensor.weather_cloud_coverage", scale = 60, buffer = 60)
 
   def update_cloud_offset(self, entity, attribute, old_state, new_state, kwargs):
 
