@@ -11,12 +11,10 @@ class LivingroomOn(appapi.AppDaemon):
   def initialize(self):
     
     on_time = datetime.time(6, 30, 0)
-    self.log(on_time)
-    self.cloud_offset = self.get_app("cloud_offset").cloud_offset
-    self.log(self.cloud_offset)
+    self.cloud_offset = self.get_app("cloud_offset").cloud_offset * 60
 
     self.run_once(self.morning_on, on_time)
-    self.handle = self.run_at_sunrise(self.morning_off, offset = self.cloud_offset * 60)
+    self.handle = self.run_at_sunrise(self.morning_off, offset = self.cloud_offset)
     
 
   def morning_on(self, kwargs):
