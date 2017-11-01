@@ -24,8 +24,8 @@ class SwitchGroupVisibility(appapi.AppDaemon):
     for chromecast in self.chromecasts:
         self.cc_groups[chromecast] = "group.cc_{}".format(chromecast)
 
-    self.listen_state(self.hide_chromecasts, entity = "media_player.{}".format(self.group), new = "playing")
-    self.listen_state(self.show_chromecasts, entity = "media_player.{}".format(self.group), new = "off")
+    self.handle_hide = self.listen_state(self.hide_chromecasts, entity = "media_player.{}".format(self.group), new = "playing")
+    self.handle_show = self.listen_state(self.show_chromecasts, entity = "media_player.{}".format(self.group), new = "off")
 
   def hide_chromecasts(self, entity, attribute, old_state, new_state, kwargs):
       

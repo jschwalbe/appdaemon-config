@@ -24,11 +24,11 @@ class AlarmRise(appapi.AppDaemon):
     self.light_name = "light.{}".format(self.wakee)
     self.log("Light registered: {}".format(self.light_name))
 
-    # self.handle =  self.listen_state(self.sunrise_lights, entity = self.sensor)
+    self.handle =  self.listen_state(self.sunrise_lights, entity = self.sensor)
 
-#   def sunrise_lights(self, entity, attribute, old_state, new_state, kwargs):
+  def sunrise_lights(self, entity, attribute, old_state, new_state, kwargs):
 
-    new_state = "8:29"
+    # new_state = "8:29"
 
     self.sensor_time = datetime.datetime.strptime(new_state, "%H:%M")    
     self.log("Alarm registered: {} - {}".format(self.wakee, self.sensor_time.time()))
@@ -45,9 +45,9 @@ class AlarmRise(appapi.AppDaemon):
   def transition_1(self, kwargs):
 
     self.log("Transition 1 started")
-    # self.call_service("light/turn_on", entity_id = self.light_name, kelvin = "2200", brightness_pct = "60", transition = "600")
+    self.call_service("light/turn_on", entity_id = self.light_name, kelvin = "2200", brightness_pct = "50", transition = "599")
     
   def transition_2(self, kwargs):
 
     self.log("Transition 2 started")
-    # self.call_service("light/turn_on", entity_id = self.light_name, kelvin = "5500", brightness_pct = "100", transition = "900")
+    self.call_service("light/turn_on", entity_id = self.light_name, kelvin = "5500", brightness_pct = "100", transition = "900")
