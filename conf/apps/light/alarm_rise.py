@@ -18,34 +18,37 @@ class AlarmRise(appapi.AppDaemon):
 
   def initialize(self):
 
-    self.wakee = self.args["wakee"]
+    # create and log the required variables from the kwargs.
+    # mqtt, sensor and light for each wakee
+    self.wakee = self.args["wakee"]    
     self.mqtt_topic = "phone/alarm/{}".format(self.wakee)
-
     self.sensor = "sensor.mqtt_phone_alarm_{}".format(self.wakee)
     self.log("Sensor registered: {}".format(self.sensor))
-    
     self.light_name = "light.{}".format(self.wakee)
     self.log("Light registered: {}".format(self.light_name))
 
-    # self.handle =  self.listen_state(self.sunrise_lights, entity = self.sensor)
-    trigger_time = datetime.time(4, 5, 0)
-    self.handle = self.run_daily(self.sunrise_lights, trigger_time)
+    # tasker submits the alarm time at 3:59 via mqtt which is detected by sensor
+    # appdaemon then runs sunrise_lights if mqtt sensor has a valid time
+    self.handle = self.run_daily(self.sunrise_lights, datetime.time(4, 0, 0))
 
-  def sunrise_lights(self, entity, attribute, old_state, new_state, kwargs):
+  def sunrise_lights(self, kwargs):
 
-    self.sensor_time = datetime.datetime.strptime(new_state, "%H:%M")    
-    self.log("Alarm registered: {} - {}".format(self.wakee, self.sensor_time.time()))
+    self.sensor_value = self.get_state(self.sensor)
 
-    self.light_time_1 = self.sensor_time - datetime.timedelta(minutes = 25)
-    self.log("Sunrise 1 transition will start at {}".format(self.light_time_1.time()))
-    
-    self.light_time_2 = self.sensor_time - datetime.timedelta(minutes = 15)
-    self.log("Sunrise 2 transition will start at {}".format(self.light_time_2.time()))
-    
-    self.run_once(self.transition_1, start = self.light_time_1.time())
-    self.run_once(self.transition_2, start = self.light_time_2.time())
+    if self.sensor_value != "":
+      self.sensor_time = datetime.datetime.strptime(self.sensor_value, "%H:%M")    
+      self.log("Alarm registered: {} - {}".format(self.wakee, self.sensor_time.time()))
 
-    self.call_service("mqtt.publish", topic = self.mqtt_topic, payload = "")
+      self.light_time_1 = self.sensor_time - datetime.timedelta(minutes = 25)
+      self.log("Sunrise 1 transition will start at {}".format(self.light_time_1.time()))
+      
+      self.light_time_2 = self.sensor_time - datetime.timedelta(minutes = 15)
+      self.log("Sunrise 2 transition will start at {}".format(self.light_time_2.time()))
+      
+      self.run_once(self.transition_1, start = self.light_time_1.time())
+      self.run_once(self.transition_2, start = self.light_time_2.time())
+
+      self.call_service("mqtt/publish", topic = self.mqtt_topic, payload = "")
 
   def transition_1(self, kwargs):
 
