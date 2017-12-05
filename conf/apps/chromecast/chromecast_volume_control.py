@@ -3,11 +3,11 @@ from datetime import timedelta
 
 # Chromecast volume card
 # 
-# Updates the volume of a chromecast following a change of value from an input_slider. 
+# Updates the volume of a chromecast following a change of value from an input_number. 
 # Conversely, it will update the slider value should the volume of the chromecast be 
 # updated from another input source (Google Home app, for example)
 # Requires the following components to be available in Homeassistant:
-# - input_slider.chromecast_volume_<name> : values 0-1, 0.01 increments
+# - input_number.chromecast_volume_<name> : values 0-1, 0.01 increments
 # - sensor.chromecast_volume_<name> : see template sensor for chromecast volume
 # - media_player.<name> : chromecast device
 # 
@@ -20,7 +20,7 @@ class VolumeControl(appapi.AppDaemon):
   def initialize(self):
 
     self.cc_name = self.args["cc_name"]
-    self.slider = "input_slider.chromecast_volume_{}".format(self.cc_name)
+    self.slider = "input_number.chromecast_volume_{}".format(self.cc_name)
     self.sensor = "sensor.chromecast_volume_{}".format(self.cc_name)    
     self.media_player = "media_player.{}".format(self.cc_name)
 
@@ -63,7 +63,7 @@ class VolumeControl(appapi.AppDaemon):
     self.prevent_vol_loop = True
     
     set_slider_vol = round(float(kwargs["new_state"]), 2)
-    self.call_service("input_slider/select_value", entity_id = self.slider, value = set_slider_vol)
+    self.call_service("input_number/select_value", entity_id = self.slider, value = set_slider_vol)
 
   def mute_on(self, entity, attribute, old_state, new_state, kwargs):
 
