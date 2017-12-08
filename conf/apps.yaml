@@ -49,3 +49,8 @@ lights_alarm_rise:
   module: alarm_rise
   class: AlarmRise
   wakee: ben
+
+lights_alarm_rise:
+  module: alarm_rise
+  class: AlarmRise
+  wakee: emma

@@ -39,10 +39,10 @@ class AlarmRise(appapi.AppDaemon):
       self.sensor_time = datetime.datetime.strptime(self.sensor_value, "%H:%M")    
       self.log("Alarm registered: {} - {}".format(self.wakee, self.sensor_time.time()))
 
-      self.light_time_1 = self.sensor_time - datetime.timedelta(minutes = 25)
+      self.light_time_1 = self.sensor_time - datetime.timedelta(minutes = 20)
       self.log("Sunrise 1 transition will start at {}".format(self.light_time_1.time()))
       
-      self.light_time_2 = self.sensor_time - datetime.timedelta(minutes = 15)
+      self.light_time_2 = self.sensor_time - datetime.timedelta(minutes = 10)
       self.log("Sunrise 2 transition will start at {}".format(self.light_time_2.time()))
       
       self.run_once(self.transition_1, start = self.light_time_1.time())
@@ -58,4 +58,4 @@ class AlarmRise(appapi.AppDaemon):
   def transition_2(self, kwargs):
 
     self.log("Transition 2 started")
-    self.call_service("light/turn_on", entity_id = self.light_name, kelvin = "5500", brightness_pct = "100", transition = "900")
+    self.call_service("light/turn_on", entity_id = self.light_name, kelvin = "5500", brightness_pct = "100", transition = "600")
